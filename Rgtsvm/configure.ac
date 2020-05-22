@@ -18,7 +18,6 @@ AC_CONFIG_FILES([src/Makefile])
 AC_LANG([C++])
 AC_PROG_CXX([g++])
 
-AC_PROG_EGREP
 AC_PROG_SED
 
 dnl Verify CUDA root.
@@ -37,7 +36,7 @@ dnl Use CUDA's version.txt file to detect them.
 CUDA_VERSION_FILE=${CUDA_ROOT_SYMLINK}/version.txt
 AC_CHECK_FILE([${CUDA_VERSION_FILE}],
 	[], AC_MSG_ERROR([Could not find CUDA version.txt]))
-CUDA_VERSION=`${EGREP} -o '[[^ ]]+$' ${CUDA_VERSION_FILE}`
+CUDA_VERSION=`${SED} -E 's/CUDA Version (.+)/\1/' ${CUDA_VERSION_FILE}`
 dnl The version.txt file gives us MAJOR.MINOR.PATCH; extract MAJOR.MINOR for
 dnl pkg-config queries.  These sed commands are from
 dnl https://www.gnu.org/software/autoconf-archive/ax_split_version.html
