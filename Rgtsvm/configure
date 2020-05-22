@@ -2810,8 +2810,7 @@ cuda_VERSION_MAJOR=`echo "$cuda_VERSION" | ${SED} 's/\([^.][^.]*\).*/\1/'`
 cuda_VERSION_MINOR=`echo "$cuda_VERSION" | ${SED} 's/[^.][^.]*.\([^.][^.]*\).*/\1/'`
 cuda_RELEASE=${cuda_VERSION_MAJOR}.${cuda_VERSION_MINOR}
 
-cuda_MODULE=cuda-${cuda_RELEASE}
-cudart_MODULE=cudart-${cuda_RELEASE}
+cuda_MODULE=cudart-${cuda_RELEASE}
 
 
 
@@ -2941,12 +2940,12 @@ if test -n "$cuda_CFLAGS"; then
     pkg_cv_cuda_CFLAGS="$cuda_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\${cuda_MODULE} \${cudart_MODULE}\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "${cuda_MODULE} ${cudart_MODULE}") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\${cuda_MODULE}\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "${cuda_MODULE}") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_cuda_CFLAGS=`$PKG_CONFIG --cflags "${cuda_MODULE} ${cudart_MODULE}" 2>/dev/null`
+  pkg_cv_cuda_CFLAGS=`$PKG_CONFIG --cflags "${cuda_MODULE}" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -2958,12 +2957,12 @@ if test -n "$cuda_LIBS"; then
     pkg_cv_cuda_LIBS="$cuda_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\${cuda_MODULE} \${cudart_MODULE}\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "${cuda_MODULE} ${cudart_MODULE}") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\${cuda_MODULE}\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "${cuda_MODULE}") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_cuda_LIBS=`$PKG_CONFIG --libs "${cuda_MODULE} ${cudart_MODULE}" 2>/dev/null`
+  pkg_cv_cuda_LIBS=`$PKG_CONFIG --libs "${cuda_MODULE}" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -2984,14 +2983,14 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        cuda_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "${cuda_MODULE} ${cudart_MODULE}" 2>&1`
+	        cuda_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "${cuda_MODULE}" 2>&1`
         else
-	        cuda_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "${cuda_MODULE} ${cudart_MODULE}" 2>&1`
+	        cuda_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "${cuda_MODULE}" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$cuda_PKG_ERRORS" >&5
 
-	as_fn_error $? "Package requirements (${cuda_MODULE} ${cudart_MODULE}) were not met:
+	as_fn_error $? "Package requirements (${cuda_MODULE}) were not met:
 
 $cuda_PKG_ERRORS
 

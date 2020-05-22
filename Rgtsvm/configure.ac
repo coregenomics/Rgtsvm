@@ -48,9 +48,8 @@ cuda_RELEASE=${cuda_VERSION_MAJOR}.${cuda_VERSION_MINOR}
 dnl Use pkg-config to get appropriate flags and variables.
 dnl
 dnl CUDA, CUDA-RT and R.
-cuda_MODULE=cuda-${cuda_RELEASE}
-cudart_MODULE=cudart-${cuda_RELEASE}
-PKG_CHECK_MODULES([cuda], [${cuda_MODULE} ${cudart_MODULE}])
+cuda_MODULE=cudart-${cuda_RELEASE}
+PKG_CHECK_MODULES([cuda], [${cuda_MODULE}])
 PKG_CHECK_VAR([cuda_ROOT], [${cuda_MODULE}], [cudaroot])
 dnl R 3.6.0 onwards validates shared libraries by loading them during
 dnl installation which often fails on HPC installations due to environment
