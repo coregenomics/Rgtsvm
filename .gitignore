@@ -1,0 +1,8 @@
+Rgtsvm/aclocal.m4
+Rgtsvm/autom4te.cache/
+Rgtsvm/config.log
+Rgtsvm/config.status
+Rgtsvm/src/*.o
+Rgtsvm/src/*.so
+Rgtsvm/src/Makefile
+Rgtsvm/src/headers.hpp.gch

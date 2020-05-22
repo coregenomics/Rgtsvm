@@ -1,113 +1,100 @@
-## Rgtsvm package,  Zhong Wang<zw355@cornell.edu>
-##
-## This scipt is a modification of the configure.in file
-## from the magma package (version 0.2.1)
-## http://cran.r-project.org/web/packages/magma/
-## The copyright information for the magma package is as follows:
-## Copyright (C) 2010 Brian J Smith
-## Licensed under GNU GPL 3 or later
+dnl Rgtsvm package
+dnl
+dnl Zhong Wang <zw355@cornell.edu> wrote originally modified the configure.ac
+dnl file from the magma package
+dnl
+dnl Pariksheet Nanda <pariksheet.nanda@uconn.edu> rewrote the file to:
+dnl - Support CUDA versions newer than 8.0
+dnl - Import all CUDA compilation and link flags via pkg-config.
+dnl - Use appropriate Autoconf macros.
+dnl - Print configuration summary.
 
-AC_INIT([Rgtsvm], 0.0.1)
-#AC_CONFIG_AUX_DIR([tools])
-
-#################### GCC Compiler ####################
-
-AC_PROG_CC(gcc)
-
-
-#################### CUDA ARCH ####################
-
-AC_ARG_WITH([cuda-arch],
-	[AC_HELP_STRING([--with-cuda-arch=STR],
-		[Find the CUDA Arch in http://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards])],
-	[CUDA_ARCH="$withval"], [CUDA_ARCH=sm_50])
-AC_MSG_RESULT([setting CUDA ARCH to ${CUDA_ARCH}])
-
-
-#################### CUDA PATH ####################
-
-AC_ARG_WITH([cuda-home],
-	[AC_HELP_STRING([--with-cuda-home=DIR],
-		[full path to CUDA installation @<:@/usr/local/cuda@:>@])],
-	[CUDA_HOME="$withval"], [CUDA_HOME=/usr/local/cuda])
-AC_MSG_RESULT([setting CUDA home directory to ${CUDA_HOME}])
-
-NVCC=${CUDA_HOME}/bin/nvcc
-AC_CHECK_FILE([${NVCC}],,
-	[AC_MSG_ERROR([nvcc not found!])])
-
-NCFLAGS="-arch=${CUDA_ARCH} -O2"
-CUDA_INC=${CUDA_HOME}/include
-AC_MSG_CHECKING([for CUDA headers])
-AC_CHECK_FILE([${CUDA_INC}/cublas.h],
-	[NCFLAGS="${NCFLAGS} -I${CUDA_INC}"],
-	[AC_MSG_ERROR([CUDA headers not found!])]
-)
-
-AC_MSG_CHECKING([whether this is a 64-bit version of CUDA])
-AC_CHECK_FILE([${CUDA_HOME}/lib64/libcublas.so], [check_bit=64-bit])
-if test "${check_bit}" == "64-bit"; then
-	BITS="64"
-	LDFLAGS="-L${CUDA_HOME}/lib64"
-else
-	BITS="32"
-	LDFLAGS="-L${CUDA_HOME}/lib"
-fi
-
-LIBS="-lcuda"
-
-#################### BOOST LIBRARY ####################
-AC_ARG_WITH([boost-home],
-	[AC_HELP_STRING([--with-boost-home=DIR],
-		[full path to BOOST installation @<:@/usr/local/boost@:>@])],
-	[BOOST_HOME="$withval"], [BOOST_HOME=/usr/local/boost])
-AC_MSG_RESULT([setting BOOST home directory to ${BOOST_HOME}])
-
-BOOST_INC=${BOOST_HOME}/include
-AC_MSG_CHECKING([for BOOST headers])
-AC_CHECK_FILE([${BOOST_INC}/boost/version.hpp],
-	[NCFLAGS="${NCFLAGS} -I${BOOST_INC}"],
-	[AC_MSG_ERROR([BOOST headers not found!])]
-)
-
-NCFLAGS="${NCFLAGS} -DBOOST_NOINLINE='__attribute__((noinline))'"
-
-#################### BOOST LIBRARY ####################
-: ${R_HOME=`R RHOME`}
-AC_ARG_WITH([r-home],
-	[AC_HELP_STRING([--with-r-home=DIR],
-		[full path to R installation @<:@@:>@])],
-	[R_HOME=$withval]
-)
-AC_MSG_RESULT([setting R home directory to ${R_HOME}])
-AC_CHECK_PROG([check_R], [R], [yes],, [${R_HOME}/bin])
-if test -z "${check_R}"; then
-	AC_MSG_ERROR([R not found!])
-fi 
-
-
-AC_MSG_RESULT([setting R header files to ${R_INCLUDE_DIR}])
-R_CPICFLAGS=`"${R_HOME}/bin/R" CMD config CPICFLAGS`
-NCFLAGS="${NCFLAGS} -Xcompiler \"-O2 ${R_CPICFLAGS} -I${R_INCLUDE_DIR}\""
-
-
-#################### SET FLAGS ####################
-
-COMPILER_FLAGS="-I${CUDA_INC} -I${BOOST_INC} -I${R_INCLUDE_DIR} -Wall -fPIC -D_GNU_SOURCE -m${BITS}"
-
-COMPILER_OPTIMIZE_FLAGS="-funroll-loops -fomit-frame-pointer -ffast-math"
-COMPILER_FLAGS="-O2 ${COMPILER_OPTIMIZE_FLAGS} ${COMPILER_FLAGS}"
-
-CFLAGS="-std=gnu99 ${COMPILER_FLAGS}"
-CXXFLAGS="${COMPILER_FLAGS}"
-
-AC_SUBST([NVCC])
-AC_SUBST([CFLAGS])
-AC_SUBST([CXXFLAGS])
-AC_SUBST([NCFLAGS])
-AC_SUBST([LDFLAGS])
-AC_SUBST([LIBS])
-AC_SUBST([CUDA_INC])
-
+m4_define([pkgversion],
+	m4_esyscmd([sed -E -n 's/Version: (.+)/\1/p' DESCRIPTION | tr -d '\n']))
+AC_INIT([Rgtsvm], [pkgversion])
 AC_CONFIG_FILES([src/Makefile])
+
+AC_LANG([C++])
+AC_PROG_CXX([g++])
+
+AC_PROG_EGREP
+AC_PROG_SED
+
+dnl Verify CUDA root.
+define([defaultcudaroot], [/usr/local/cuda])
+AC_ARG_WITH([cuda-root],
+	AC_HELP_STRING([--with-cuda-root=DIR],
+		[full path to CUDA installation @<:@defaultcudaroot@:>@]),
+	[cuda_ROOT_SYMLINK="$withval"], [cuda_ROOT_SYMLINK=defaultcudaroot])
+AC_CHECK_FILE([${cuda_ROOT_SYMLINK}],
+	[], AC_MSG_ERROR([CUDA root directory ${cuda_ROOT_SYMLINK} does not exist!]))
+
+dnl Parse CUDA version for pkg-config.
+dnl
+dnl To involke pkg-config we need to know the CUDA major and minor versions.
+dnl Use CUDA's version.txt file to detect them.
+cuda_VERSION_FILE=${cuda_ROOT_SYMLINK}/version.txt
+AC_CHECK_FILE([${cuda_VERSION_FILE}],
+	[], AC_MSG_ERROR([Could not find CUDA version.txt]))
+cuda_VERSION=`${EGREP} -o '[[^ ]]+$' ${cuda_VERSION_FILE}`
+dnl The version.txt file gives us MAJOR.MINOR.PATCH; extract MAJOR.MINOR for
+dnl pkg-config queries.  These sed commands are from
+dnl https://www.gnu.org/software/autoconf-archive/ax_split_version.html
+cuda_VERSION_MAJOR=`echo "$cuda_VERSION" | ${SED} 's/\([[^.]][[^.]]*\).*/\1/'`
+cuda_VERSION_MINOR=`echo "$cuda_VERSION" | ${SED} 's/[[^.]][[^.]]*.\([[^.]][[^.]]*\).*/\1/'`
+cuda_RELEASE=${cuda_VERSION_MAJOR}.${cuda_VERSION_MINOR}
+
+dnl Use pkg-config to get appropriate flags and variables.
+dnl
+dnl CUDA, CUDA-RT and R.
+cuda_MODULE=cuda-${cuda_RELEASE}
+cudart_MODULE=cudart-${cuda_RELEASE}
+PKG_CHECK_MODULES([cuda], [${cuda_MODULE} ${cudart_MODULE}])
+PKG_CHECK_VAR([cuda_ROOT], [${cuda_MODULE}], [cudaroot])
+dnl R 3.6.0 onwards validates shared libraries by loading them during
+dnl installation which often fails on HPC installations due to environment
+dnl isolation.  Therefore use the standard HPC practise of encoding the rpath
+dnl into the shared library.
+PKG_CHECK_VAR([cuda_LIBDIR], [${cuda_MODULE}], [libdir])
+cuda_RPATH="-Wl,-rpath,${cuda_LIBDIR}"
+cuda_NVCC=${cuda_ROOT}/bin/nvcc
+dnl https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#building-for-maximum-compatibility
+cuda_NVCCFLAGS=
+cuda_NVCCFLAGS+="-gencode=arch=compute_30,code=sm_30"
+cuda_NVCCFLAGS+=" -gencode=arch=compute_35,code=sm_35"
+cuda_NVCCFLAGS+=" -gencode=arch=compute_50,code=sm_50"
+cuda_NVCCFLAGS+=" -gencode=arch=compute_60,code=sm_60"
+cuda_NVCCFLAGS+=" -gencode=arch=compute_70,code=sm_70"
+cuda_NVCCFLAGS+=" -gencode=arch=compute_75,code=sm_75"
+cuda_NVCCFLAGS+=" -gencode=arch=compute_75,code=compute_75"
+dnl Boost.
+AC_CHECK_HEADERS([boost/version.hpp])
+dnl R.
+PKG_CHECK_MODULES([r], [libR])
+
+dnl Print configuration summary.
+echo
+echo "m4_text_box(Rgtsvm configuration)"
+echo
+echo "CUDA_VERSION = ${cuda_VERSION}"
+echo "CUDA_ROOT    = ${cuda_ROOT}"
+echo "CUDA_CFLAGS  = ${cuda_CFLAGS}"
+echo "CUDA_LIBS    = ${cuda_LIBS}"
+echo "CUDA_RPATH   = ${cuda_RPATH}"
+echo "CXX          = ${CXX}"
+echo "CXXFLAGS     = ${CXXFLAGS}"
+echo "NVCC         = ${cuda_NVCC}"
+echo "NVCCFLAGS    = ${cuda_NVCCFLAGS}"
+echo "R_CFLAGS     = ${r_CFLAGS}"
+echo "R_LIBS       = ${r_LIBS}"
+echo
+
+AC_SUBST([cuda_CFLAGS])
+AC_SUBST([cuda_LIBS])
+AC_SUBST([cuda_RPATH])
+AC_SUBST([cuda_NVCC])
+AC_SUBST([cuda_NVCCFLAGS])
+AC_SUBST([r_CFLAGS])
+AC_SUBST([r_LIBS])
+
 AC_OUTPUT

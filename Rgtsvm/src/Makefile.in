@@ -1,35 +1,37 @@
-##	Copyright (C) 2017  Zhong Wang
+## Copyright (C) 2017 Zhong Wang
+## Copyright (C) 2020 Pariksheet Nanda
 ##
-##	This program is free software: you can redistribute it and/or modify
-##	it under the terms of the GNU General Public License as published by
-##	the Free Software Foundation, either version 3 of the License, or
-##	(at your option) any later version.
+## This program is free software: you can redistribute it and/or modify it
+## under the terms of the GNU General Public License as published by the Free
+## Software Foundation, either version 3 of the License, or (at your option)
+## any later version.
 ##
-##	This program is distributed in the hope that it will be useful,
-##	but WITHOUT ANY WARRANTY; without even the implied warranty of
-##	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-##	GNU General Public License for more details.
+## This program is distributed in the hope that it will be useful, but WITHOUT
+## ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+## FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+## more details.
 ##
-##	You should have received a copy of the GNU General Public License
-##	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+## You should have received a copy of the GNU General Public License along with
+## this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Compilers
-EXT := cu
+EXT = cu
 
-CXX := g++
-NVCC := @NVCC@
-CXXFLAGS := @CXXFLAGS@
-NVCCFLAGS := @NCFLAGS@
-CFLAGS := @CFLAGS@
-NCFLAGS := @NCFLAGS@
-LDFLAGS := @LDFLAGS@
-LIBS := @LIBS@
+CXX = @CXX@
+CXXFLAGS = @CXXFLAGS@ @cuda_CFLAGS@ @r_CFLAGS@ -fPIC
+NVCC = @cuda_NVCC@
+NVCCFLAGS = @cuda_CFLAGS@ @cuda_NVCCFLAGS@ -Xcompiler -fPIC
+comma = ,
+space = $(null) #
+LDFLAGS_WL = @cuda_RPATH@ @LDFLAGS@ @cuda_LIBS@ @r_LIBS@
+LDFLAGS_XL = $(subst -Wl$(comma),-Xlinker$(space),$(LDFLAGS_WL))
+LDFLAGS = $(subst -fopenmp,-Xcompiler -fopenmp,$(LDFLAGS_XL))
 
 # Program-specifics
-TARGET := Rgtsvm.so
-OBJS := Rgtsvm.o
+TARGET = Rgtsvm.so
+OBJS = Rgtsvm.o
 
-HEADERS := \
+include_HEADERS = \
 	Rgtsvm.hpp \
 	svm.hpp \
 	cuda.hpp \
@@ -42,7 +44,7 @@ HEADERS := \
 	cuda_helpers.hpp \
 	helpers.hpp
 
-SOURCES := \
+SOURCES = \
 	Rgtsvm_RI.c \
 	Rgtsvm.cpp \
 	Rgtsvm2.cpp \
@@ -55,40 +57,36 @@ SOURCES := \
 	cuda_array.cu \
 	cuda_exception.cpp
 
-PRECOMPILED_HEADER_SOURCE := \
+PRECOMPILED_HEADER_SOURCE = \
 	headers.hpp
 
 
 #====  derived variables  =====================================================
 
-PRECOMPILED_HEADER := ${PRECOMPILED_HEADER_SOURCE:%.hpp=%.hpp.gch}
+PRECOMPILED_HEADER = $(PRECOMPILED_HEADER_SOURCE:%.hpp=%.hpp.gch)
 
-OBJECTS := \
-	${patsubst %.cpp,%.o,${filter %.cpp,$(SOURCES)}} \
-	${patsubst %.c,%.o,${filter %.c,$(SOURCES)}} \
-	${patsubst %.cu,%.o,${filter %.cu,$(SOURCES)}}
+OBJECTS = \
+	$(patsubst %.cpp,%.o,$(filter %.cpp,$(SOURCES))) \
+	$(patsubst %.c,%.o,$(filter %.c,$(SOURCES))) \
+	$(patsubst %.cu,%.o,$(filter %.cu,$(SOURCES)))
 
 
 # Build rules
-.SUFFIXES: .cu .o
+SUFFIXES = .cu .o
 
 all: $(TARGET)
 
 $(TARGET) : $(OBJECTS)
-	$(NVCC) -shared $(LDFLAGS) $(LIBS) $(OBJECTS) -o $@ 
+	$(NVCC) -shared $(LDFLAGS) $(OBJECTS) -o $@ 
 
 %.o : %.cu
 	$(NVCC) $(NVCCFLAGS) -c $< -o $@
 
-%.o : %.c $(PRECOMPILED_HEADER)
-	$(CC) $(CFLAGS) -c $< -o $@
-
 %.o : %.cpp $(PRECOMPILED_HEADER)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(PRECOMPILED_HEADER) : $(PRECOMPILED_HEADER_SOURCE) $(HEADERS)
+$(PRECOMPILED_HEADER) : $(PRECOMPILED_HEADER_SOURCE) $(include_HEADERS)
 	$(CXX) $(CXXFLAGS) $<
 
 clean:
 	rm -rf $(OBJECTS) $(TARGET)
-
