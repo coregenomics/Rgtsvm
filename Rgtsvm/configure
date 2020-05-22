@@ -620,11 +620,16 @@ ac_includes_default="\
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+LIBR_CXXPICFLAGS
+LIBR_CXXFLAGS
 NVCCFLAGS
 NVCC
 CUDA_RPATH
+LIBR_HOME
 LIBR_LIBS
 LIBR_CFLAGS
+EGREP
+GREP
 CXXCPP
 CUDA_LIBDIR
 CUDA_ROOT
@@ -634,8 +639,6 @@ PKG_CONFIG_LIBDIR
 PKG_CONFIG_PATH
 PKG_CONFIG
 SED
-EGREP
-GREP
 OBJEXT
 EXEEXT
 ac_ct_CXX
@@ -705,7 +708,8 @@ CUDA_ROOT
 CUDA_LIBDIR
 CXXCPP
 LIBR_CFLAGS
-LIBR_LIBS'
+LIBR_LIBS
+LIBR_HOME'
 
 
 # Initialize some variables set by options.
@@ -1347,6 +1351,7 @@ Some influential environment variables:
   CXXCPP      C++ preprocessor
   LIBR_CFLAGS C compiler flags for LIBR, overriding pkg-config
   LIBR_LIBS   linker flags for LIBR, overriding pkg-config
+  LIBR_HOME   value of rhome for libR, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -2548,136 +2553,6 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for grep that handles long lines and -e" >&5
-$as_echo_n "checking for grep that handles long lines and -e... " >&6; }
-if ${ac_cv_path_GREP+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  if test -z "$GREP"; then
-  ac_path_GREP_found=false
-  # Loop through the user's path and test for each of PROGNAME-LIST
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH$PATH_SEPARATOR/usr/xpg4/bin
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_prog in grep ggrep; do
-    for ac_exec_ext in '' $ac_executable_extensions; do
-      ac_path_GREP="$as_dir/$ac_prog$ac_exec_ext"
-      as_fn_executable_p "$ac_path_GREP" || continue
-# Check for GNU ac_path_GREP and select it if it is found.
-  # Check for GNU $ac_path_GREP
-case `"$ac_path_GREP" --version 2>&1` in
-*GNU*)
-  ac_cv_path_GREP="$ac_path_GREP" ac_path_GREP_found=:;;
-*)
-  ac_count=0
-  $as_echo_n 0123456789 >"conftest.in"
-  while :
-  do
-    cat "conftest.in" "conftest.in" >"conftest.tmp"
-    mv "conftest.tmp" "conftest.in"
-    cp "conftest.in" "conftest.nl"
-    $as_echo 'GREP' >> "conftest.nl"
-    "$ac_path_GREP" -e 'GREP$' -e '-(cannot match)-' < "conftest.nl" >"conftest.out" 2>/dev/null || break
-    diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
-    as_fn_arith $ac_count + 1 && ac_count=$as_val
-    if test $ac_count -gt ${ac_path_GREP_max-0}; then
-      # Best one so far, save it but keep looking for a better one
-      ac_cv_path_GREP="$ac_path_GREP"
-      ac_path_GREP_max=$ac_count
-    fi
-    # 10*(2^10) chars as input seems more than enough
-    test $ac_count -gt 10 && break
-  done
-  rm -f conftest.in conftest.tmp conftest.nl conftest.out;;
-esac
-
-      $ac_path_GREP_found && break 3
-    done
-  done
-  done
-IFS=$as_save_IFS
-  if test -z "$ac_cv_path_GREP"; then
-    as_fn_error $? "no acceptable grep could be found in $PATH$PATH_SEPARATOR/usr/xpg4/bin" "$LINENO" 5
-  fi
-else
-  ac_cv_path_GREP=$GREP
-fi
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_path_GREP" >&5
-$as_echo "$ac_cv_path_GREP" >&6; }
- GREP="$ac_cv_path_GREP"
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for egrep" >&5
-$as_echo_n "checking for egrep... " >&6; }
-if ${ac_cv_path_EGREP+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  if echo a | $GREP -E '(a|b)' >/dev/null 2>&1
-   then ac_cv_path_EGREP="$GREP -E"
-   else
-     if test -z "$EGREP"; then
-  ac_path_EGREP_found=false
-  # Loop through the user's path and test for each of PROGNAME-LIST
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH$PATH_SEPARATOR/usr/xpg4/bin
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_prog in egrep; do
-    for ac_exec_ext in '' $ac_executable_extensions; do
-      ac_path_EGREP="$as_dir/$ac_prog$ac_exec_ext"
-      as_fn_executable_p "$ac_path_EGREP" || continue
-# Check for GNU ac_path_EGREP and select it if it is found.
-  # Check for GNU $ac_path_EGREP
-case `"$ac_path_EGREP" --version 2>&1` in
-*GNU*)
-  ac_cv_path_EGREP="$ac_path_EGREP" ac_path_EGREP_found=:;;
-*)
-  ac_count=0
-  $as_echo_n 0123456789 >"conftest.in"
-  while :
-  do
-    cat "conftest.in" "conftest.in" >"conftest.tmp"
-    mv "conftest.tmp" "conftest.in"
-    cp "conftest.in" "conftest.nl"
-    $as_echo 'EGREP' >> "conftest.nl"
-    "$ac_path_EGREP" 'EGREP$' < "conftest.nl" >"conftest.out" 2>/dev/null || break
-    diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
-    as_fn_arith $ac_count + 1 && ac_count=$as_val
-    if test $ac_count -gt ${ac_path_EGREP_max-0}; then
-      # Best one so far, save it but keep looking for a better one
-      ac_cv_path_EGREP="$ac_path_EGREP"
-      ac_path_EGREP_max=$ac_count
-    fi
-    # 10*(2^10) chars as input seems more than enough
-    test $ac_count -gt 10 && break
-  done
-  rm -f conftest.in conftest.tmp conftest.nl conftest.out;;
-esac
-
-      $ac_path_EGREP_found && break 3
-    done
-  done
-  done
-IFS=$as_save_IFS
-  if test -z "$ac_cv_path_EGREP"; then
-    as_fn_error $? "no acceptable egrep could be found in $PATH$PATH_SEPARATOR/usr/xpg4/bin" "$LINENO" 5
-  fi
-else
-  ac_cv_path_EGREP=$EGREP
-fi
-
-   fi
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_path_EGREP" >&5
-$as_echo "$ac_cv_path_EGREP" >&6; }
- EGREP="$ac_cv_path_EGREP"
-
-
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for a sed that does not truncate output" >&5
 $as_echo_n "checking for a sed that does not truncate output... " >&6; }
 if ${ac_cv_path_SED+:} false; then :
@@ -2805,7 +2680,7 @@ else
   as_fn_error $? "Could not find CUDA version.txt" "$LINENO" 5
 fi
 
-CUDA_VERSION=`${EGREP} -o '[^ ]+$' ${CUDA_VERSION_FILE}`
+CUDA_VERSION=`${SED} -E 's/CUDA Version (.+)/\1/' ${CUDA_VERSION_FILE}`
 CUDA_VERSION_MAJOR=`echo "$CUDA_VERSION" | ${SED} 's/\([^.][^.]*\).*/\1/'`
 CUDA_VERSION_MINOR=`echo "$CUDA_VERSION" | ${SED} 's/[^.][^.]*.\([^.][^.]*\).*/\1/'`
 CUDA_RELEASE=${CUDA_VERSION_MAJOR}.${CUDA_VERSION_MINOR}
@@ -3068,7 +2943,7 @@ CUDA_LIBDIR=$pkg_cv_CUDA_LIBDIR
 if test "x$CUDA_LIBDIR" = x""; then :
 
 fi
-CUDA_RPATH="-Wl,-rpath,${CUDA_LIBDIR}"
+CUDA_RPATH="-Xlinker -rpath,${CUDA_LIBDIR}"
 NVCC=${CUDA_ROOT}/bin/nvcc
 NVCCFLAGS=
 NVCCFLAGS+="-gencode=arch=compute_30,code=sm_30"
@@ -3211,6 +3086,136 @@ ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for grep that handles long lines and -e" >&5
+$as_echo_n "checking for grep that handles long lines and -e... " >&6; }
+if ${ac_cv_path_GREP+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -z "$GREP"; then
+  ac_path_GREP_found=false
+  # Loop through the user's path and test for each of PROGNAME-LIST
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH$PATH_SEPARATOR/usr/xpg4/bin
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_prog in grep ggrep; do
+    for ac_exec_ext in '' $ac_executable_extensions; do
+      ac_path_GREP="$as_dir/$ac_prog$ac_exec_ext"
+      as_fn_executable_p "$ac_path_GREP" || continue
+# Check for GNU ac_path_GREP and select it if it is found.
+  # Check for GNU $ac_path_GREP
+case `"$ac_path_GREP" --version 2>&1` in
+*GNU*)
+  ac_cv_path_GREP="$ac_path_GREP" ac_path_GREP_found=:;;
+*)
+  ac_count=0
+  $as_echo_n 0123456789 >"conftest.in"
+  while :
+  do
+    cat "conftest.in" "conftest.in" >"conftest.tmp"
+    mv "conftest.tmp" "conftest.in"
+    cp "conftest.in" "conftest.nl"
+    $as_echo 'GREP' >> "conftest.nl"
+    "$ac_path_GREP" -e 'GREP$' -e '-(cannot match)-' < "conftest.nl" >"conftest.out" 2>/dev/null || break
+    diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
+    as_fn_arith $ac_count + 1 && ac_count=$as_val
+    if test $ac_count -gt ${ac_path_GREP_max-0}; then
+      # Best one so far, save it but keep looking for a better one
+      ac_cv_path_GREP="$ac_path_GREP"
+      ac_path_GREP_max=$ac_count
+    fi
+    # 10*(2^10) chars as input seems more than enough
+    test $ac_count -gt 10 && break
+  done
+  rm -f conftest.in conftest.tmp conftest.nl conftest.out;;
+esac
+
+      $ac_path_GREP_found && break 3
+    done
+  done
+  done
+IFS=$as_save_IFS
+  if test -z "$ac_cv_path_GREP"; then
+    as_fn_error $? "no acceptable grep could be found in $PATH$PATH_SEPARATOR/usr/xpg4/bin" "$LINENO" 5
+  fi
+else
+  ac_cv_path_GREP=$GREP
+fi
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_path_GREP" >&5
+$as_echo "$ac_cv_path_GREP" >&6; }
+ GREP="$ac_cv_path_GREP"
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for egrep" >&5
+$as_echo_n "checking for egrep... " >&6; }
+if ${ac_cv_path_EGREP+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if echo a | $GREP -E '(a|b)' >/dev/null 2>&1
+   then ac_cv_path_EGREP="$GREP -E"
+   else
+     if test -z "$EGREP"; then
+  ac_path_EGREP_found=false
+  # Loop through the user's path and test for each of PROGNAME-LIST
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH$PATH_SEPARATOR/usr/xpg4/bin
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_prog in egrep; do
+    for ac_exec_ext in '' $ac_executable_extensions; do
+      ac_path_EGREP="$as_dir/$ac_prog$ac_exec_ext"
+      as_fn_executable_p "$ac_path_EGREP" || continue
+# Check for GNU ac_path_EGREP and select it if it is found.
+  # Check for GNU $ac_path_EGREP
+case `"$ac_path_EGREP" --version 2>&1` in
+*GNU*)
+  ac_cv_path_EGREP="$ac_path_EGREP" ac_path_EGREP_found=:;;
+*)
+  ac_count=0
+  $as_echo_n 0123456789 >"conftest.in"
+  while :
+  do
+    cat "conftest.in" "conftest.in" >"conftest.tmp"
+    mv "conftest.tmp" "conftest.in"
+    cp "conftest.in" "conftest.nl"
+    $as_echo 'EGREP' >> "conftest.nl"
+    "$ac_path_EGREP" 'EGREP$' < "conftest.nl" >"conftest.out" 2>/dev/null || break
+    diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
+    as_fn_arith $ac_count + 1 && ac_count=$as_val
+    if test $ac_count -gt ${ac_path_EGREP_max-0}; then
+      # Best one so far, save it but keep looking for a better one
+      ac_cv_path_EGREP="$ac_path_EGREP"
+      ac_path_EGREP_max=$ac_count
+    fi
+    # 10*(2^10) chars as input seems more than enough
+    test $ac_count -gt 10 && break
+  done
+  rm -f conftest.in conftest.tmp conftest.nl conftest.out;;
+esac
+
+      $ac_path_EGREP_found && break 3
+    done
+  done
+  done
+IFS=$as_save_IFS
+  if test -z "$ac_cv_path_EGREP"; then
+    as_fn_error $? "no acceptable egrep could be found in $PATH$PATH_SEPARATOR/usr/xpg4/bin" "$LINENO" 5
+  fi
+else
+  ac_cv_path_EGREP=$EGREP
+fi
+
+   fi
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_path_EGREP" >&5
+$as_echo "$ac_cv_path_EGREP" >&6; }
+ EGREP="$ac_cv_path_EGREP"
 
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ANSI C header files" >&5
@@ -3446,23 +3451,80 @@ $as_echo "yes" >&6; }
 
 fi
 
+if test -n "$LIBR_HOME"; then
+    pkg_cv_LIBR_HOME="$LIBR_HOME"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libR\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libR") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBR_HOME=`$PKG_CONFIG --variable="rhome" "libR" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+LIBR_HOME=$pkg_cv_LIBR_HOME
+
+if test "x$LIBR_HOME" = x""; then :
+
+fi
+R=${LIBR_HOME}/bin/R
+as_ac_File=`$as_echo "ac_cv_file_${R}" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ${R}" >&5
+$as_echo_n "checking for ${R}... " >&6; }
+if eval \${$as_ac_File+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  test "$cross_compiling" = yes &&
+  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
+if test -r "${R}"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+eval ac_res=\$$as_ac_File
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_ac_File"\" = x"yes"; then :
+
+fi
+
+LIBR_CXXPICFLAGS=`${R} CMD config CXXPICFLAGS`
+LIBR_CXXFLAGS=`${R} CMD config CXXFLAGS`
+
+LIBR_LIBS=`echo ${LIBR_LIBS} | ${SED} 's/-Wl,/-Xlinker /g'`
+LIBR_LIBS=`echo ${LIBR_LIBS} | ${SED} 's/-fopenmp/-Xcompiler -fopenmp/'`
+
 echo
 echo "## -------------------- ##
 ## Rgtsvm configuration ##
 ## -------------------- ##"
 echo
-echo "CUDA_VERSION = ${CUDA_VERSION}"
-echo "CUDA_ROOT    = ${CUDA_ROOT}"
-echo "CUDA_CFLAGS  = ${CUDA_CFLAGS}"
-echo "CUDA_LIBS    = ${CUDA_LIBS}"
-echo "CUDA_RPATH   = ${CUDA_RPATH}"
-echo "CXX          = ${CXX}"
-echo "CXXFLAGS     = ${CXXFLAGS}"
-echo "NVCC         = ${NVCC}"
-echo "NVCCFLAGS    = ${NVCCFLAGS}"
-echo "LIBR_CFLAGS  = ${LIBR_CFLAGS}"
-echo "LIBR_LIBS    = ${LIBR_LIBS}"
+echo "CUDA_VERSION     = ${CUDA_VERSION}"
+echo "CUDA_ROOT        = ${CUDA_ROOT}"
+echo "CUDA_CFLAGS      = ${CUDA_CFLAGS}"
+echo "CUDA_LIBS        = ${CUDA_LIBS}"
+echo "CUDA_RPATH       = ${CUDA_RPATH}"
 echo
+echo "CXX              = ${CXX}"
+echo "CXXFLAGS         = ${CXXFLAGS}"
+echo
+echo "NVCC             = ${NVCC}"
+echo "NVCCFLAGS        = ${NVCCFLAGS}"
+echo
+echo "LIBR_CFLAGS      = ${LIBR_CFLAGS}"
+echo "LIBR_CXXFLAGS    = ${LIBR_CXXFLAGS}"
+echo "LIBR_CXXPICFLAGS = ${LIBR_CXXPICFLAGS}"
+echo "LIBR_LIBS        = ${LIBR_LIBS}"
+echo
+
+
 
 
 
