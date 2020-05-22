@@ -25,9 +25,8 @@ LDFLAGS = @CUDA_RPATH@ @LDFLAGS@ @CUDA_LIBS@ @LIBR_LIBS@
 
 # Program-specifics
 TARGET = Rgtsvm.so
-OBJS = Rgtsvm.o
 
-include_HEADERS = \
+HEADERS = \
 	Rgtsvm.hpp \
 	svm.hpp \
 	cuda.hpp \
@@ -40,40 +39,27 @@ include_HEADERS = \
 	cuda_helpers.hpp \
 	helpers.hpp
 
-SOURCES = \
-	Rgtsvm_RI.c \
-	Rgtsvm.cpp \
-	Rgtsvm2.cpp \
-	svmlight.cpp \
-	svm.cpp \
-	cuda_sparse_kernel.cu \
-	cuda_reduce.cu \
-	cuda_find_largest.cu \
-	cuda_partial_sum.cu \
-	cuda_array.cu \
-	cuda_exception.cpp
-
-PRECOMPILED_HEADER_SOURCE = \
-	headers.hpp
-
-
-#====  derived variables  =====================================================
-
-PRECOMPILED_HEADER = $(PRECOMPILED_HEADER_SOURCE:%.hpp=%.hpp.gch)
+PRECOMPILED_HEADER = \
+	headers.hpp.gch
 
 OBJECTS = \
-	$(patsubst %.cpp,%.o,$(filter %.cpp,$(SOURCES))) \
-	$(patsubst %.c,%.o,$(filter %.c,$(SOURCES))) \
-	$(patsubst %.cu,%.o,$(filter %.cu,$(SOURCES)))
-
+	Rgtsvm.o \
+	Rgtsvm2.o \
+	Rgtsvm_RI.o \
+	cuda_array.o \
+	cuda_exception.o \
+	cuda_find_largest.o \
+	cuda_partial_sum.o \
+	cuda_reduce.o \
+	cuda_sparse_kernel.o \
+	svm.o \
+	svmlight.o
 
 # Build rules
-SUFFIXES = .cu .o
-
 all: $(TARGET)
 
 $(TARGET) : $(OBJECTS)
-	$(NVCC) -shared $(LDFLAGS) $(OBJECTS) -o $@ 
+	$(NVCC) -shared $(LDFLAGS) $(OBJECTS) -o $@
 
 %.o : %.cu
 	$(NVCC) $(NVCCFLAGS) -c $< -o $@
@@ -81,8 +67,8 @@ $(TARGET) : $(OBJECTS)
 %.o : %.cpp $(PRECOMPILED_HEADER)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(PRECOMPILED_HEADER) : $(PRECOMPILED_HEADER_SOURCE) $(include_HEADERS)
+%.hpp.gch : %.hpp $(HEADERS)
 	$(CXX) $(CXXFLAGS) $<
 
 clean:
-	rm -rf $(OBJECTS) $(TARGET)
+	rm -rf $(OBJECTS) $(TARGET) $(PRECOMPILED_HEADER)
