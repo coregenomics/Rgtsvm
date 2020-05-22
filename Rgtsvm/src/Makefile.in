@@ -18,12 +18,12 @@
 EXT = cu
 
 CXX = @CXX@
-CXXFLAGS = @CXXFLAGS@ @cuda_CFLAGS@ @r_CFLAGS@ -fPIC
-NVCC = @cuda_NVCC@
-NVCCFLAGS = @cuda_CFLAGS@ @cuda_NVCCFLAGS@ -Xcompiler -fPIC
+CXXFLAGS = @CXXFLAGS@ @CUDA_CFLAGS@ @LIBR_CFLAGS@ -fPIC
+NVCC = @NVCC@
+NVCCFLAGS = @CUDA_CFLAGS@ @NVCCFLAGS@ -Xcompiler -fPIC
 comma = ,
 space = $(null) #
-LDFLAGS_WL = @cuda_RPATH@ @LDFLAGS@ @cuda_LIBS@ @r_LIBS@
+LDFLAGS_WL = @CUDA_RPATH@ @LDFLAGS@ @CUDA_LIBS@ @LIBR_LIBS@
 LDFLAGS_XL = $(subst -Wl$(comma),-Xlinker$(space),$(LDFLAGS_WL))
 LDFLAGS = $(subst -fopenmp,-Xcompiler -fopenmp,$(LDFLAGS_XL))
 

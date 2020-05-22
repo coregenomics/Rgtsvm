@@ -620,16 +620,16 @@ ac_includes_default="\
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
-cuda_NVCCFLAGS
-cuda_NVCC
-cuda_RPATH
-r_LIBS
-r_CFLAGS
+NVCCFLAGS
+NVCC
+CUDA_RPATH
+LIBR_LIBS
+LIBR_CFLAGS
 CXXCPP
-cuda_LIBDIR
-cuda_ROOT
-cuda_LIBS
-cuda_CFLAGS
+CUDA_LIBDIR
+CUDA_ROOT
+CUDA_LIBS
+CUDA_CFLAGS
 PKG_CONFIG_LIBDIR
 PKG_CONFIG_PATH
 PKG_CONFIG
@@ -699,13 +699,13 @@ CCC
 PKG_CONFIG
 PKG_CONFIG_PATH
 PKG_CONFIG_LIBDIR
-cuda_CFLAGS
-cuda_LIBS
-cuda_ROOT
-cuda_LIBDIR
+CUDA_CFLAGS
+CUDA_LIBS
+CUDA_ROOT
+CUDA_LIBDIR
 CXXCPP
-r_CFLAGS
-r_LIBS'
+LIBR_CFLAGS
+LIBR_LIBS'
 
 
 # Initialize some variables set by options.
@@ -1340,13 +1340,13 @@ Some influential environment variables:
               directories to add to pkg-config's search path
   PKG_CONFIG_LIBDIR
               path overriding pkg-config's built-in search path
-  cuda_CFLAGS C compiler flags for cuda, overriding pkg-config
-  cuda_LIBS   linker flags for cuda, overriding pkg-config
-  cuda_ROOT   value of cudaroot for ${cuda_MODULE}, overriding pkg-config
-  cuda_LIBDIR value of libdir for ${cuda_MODULE}, overriding pkg-config
+  CUDA_CFLAGS C compiler flags for CUDA, overriding pkg-config
+  CUDA_LIBS   linker flags for CUDA, overriding pkg-config
+  CUDA_ROOT   value of cudaroot for ${CUDA_MODULE}, overriding pkg-config
+  CUDA_LIBDIR value of libdir for ${CUDA_MODULE}, overriding pkg-config
   CXXCPP      C++ preprocessor
-  r_CFLAGS    C compiler flags for r, overriding pkg-config
-  r_LIBS      linker flags for r, overriding pkg-config
+  LIBR_CFLAGS C compiler flags for LIBR, overriding pkg-config
+  LIBR_LIBS   linker flags for LIBR, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -2752,20 +2752,20 @@ $as_echo "$ac_cv_path_SED" >&6; }
 
 # Check whether --with-cuda-root was given.
 if test "${with_cuda_root+set}" = set; then :
-  withval=$with_cuda_root; cuda_ROOT_SYMLINK="$withval"
+  withval=$with_cuda_root; CUDA_ROOT_SYMLINK="$withval"
 else
-  cuda_ROOT_SYMLINK=/usr/local/cuda
+  CUDA_ROOT_SYMLINK=/usr/local/cuda
 fi
 
-as_ac_File=`$as_echo "ac_cv_file_${cuda_ROOT_SYMLINK}" | $as_tr_sh`
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ${cuda_ROOT_SYMLINK}" >&5
-$as_echo_n "checking for ${cuda_ROOT_SYMLINK}... " >&6; }
+as_ac_File=`$as_echo "ac_cv_file_${CUDA_ROOT_SYMLINK}" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ${CUDA_ROOT_SYMLINK}" >&5
+$as_echo_n "checking for ${CUDA_ROOT_SYMLINK}... " >&6; }
 if eval \${$as_ac_File+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   test "$cross_compiling" = yes &&
   as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
-if test -r "${cuda_ROOT_SYMLINK}"; then
+if test -r "${CUDA_ROOT_SYMLINK}"; then
   eval "$as_ac_File=yes"
 else
   eval "$as_ac_File=no"
@@ -2777,20 +2777,20 @@ $as_echo "$ac_res" >&6; }
 if eval test \"x\$"$as_ac_File"\" = x"yes"; then :
 
 else
-  as_fn_error $? "CUDA root directory ${cuda_ROOT_SYMLINK} does not exist!" "$LINENO" 5
+  as_fn_error $? "CUDA root directory ${CUDA_ROOT_SYMLINK} does not exist!" "$LINENO" 5
 fi
 
 
-cuda_VERSION_FILE=${cuda_ROOT_SYMLINK}/version.txt
-as_ac_File=`$as_echo "ac_cv_file_${cuda_VERSION_FILE}" | $as_tr_sh`
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ${cuda_VERSION_FILE}" >&5
-$as_echo_n "checking for ${cuda_VERSION_FILE}... " >&6; }
+CUDA_VERSION_FILE=${CUDA_ROOT_SYMLINK}/version.txt
+as_ac_File=`$as_echo "ac_cv_file_${CUDA_VERSION_FILE}" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ${CUDA_VERSION_FILE}" >&5
+$as_echo_n "checking for ${CUDA_VERSION_FILE}... " >&6; }
 if eval \${$as_ac_File+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   test "$cross_compiling" = yes &&
   as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
-if test -r "${cuda_VERSION_FILE}"; then
+if test -r "${CUDA_VERSION_FILE}"; then
   eval "$as_ac_File=yes"
 else
   eval "$as_ac_File=no"
@@ -2805,12 +2805,12 @@ else
   as_fn_error $? "Could not find CUDA version.txt" "$LINENO" 5
 fi
 
-cuda_VERSION=`${EGREP} -o '[^ ]+$' ${cuda_VERSION_FILE}`
-cuda_VERSION_MAJOR=`echo "$cuda_VERSION" | ${SED} 's/\([^.][^.]*\).*/\1/'`
-cuda_VERSION_MINOR=`echo "$cuda_VERSION" | ${SED} 's/[^.][^.]*.\([^.][^.]*\).*/\1/'`
-cuda_RELEASE=${cuda_VERSION_MAJOR}.${cuda_VERSION_MINOR}
+CUDA_VERSION=`${EGREP} -o '[^ ]+$' ${CUDA_VERSION_FILE}`
+CUDA_VERSION_MAJOR=`echo "$CUDA_VERSION" | ${SED} 's/\([^.][^.]*\).*/\1/'`
+CUDA_VERSION_MINOR=`echo "$CUDA_VERSION" | ${SED} 's/[^.][^.]*.\([^.][^.]*\).*/\1/'`
+CUDA_RELEASE=${CUDA_VERSION_MAJOR}.${CUDA_VERSION_MINOR}
 
-cuda_MODULE=cudart-${cuda_RELEASE}
+CUDA_MODULE=cudart-${CUDA_RELEASE}
 
 
 
@@ -2933,19 +2933,19 @@ $as_echo "no" >&6; }
 fi
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for cuda" >&5
-$as_echo_n "checking for cuda... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CUDA" >&5
+$as_echo_n "checking for CUDA... " >&6; }
 
-if test -n "$cuda_CFLAGS"; then
-    pkg_cv_cuda_CFLAGS="$cuda_CFLAGS"
+if test -n "$CUDA_CFLAGS"; then
+    pkg_cv_CUDA_CFLAGS="$CUDA_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\${cuda_MODULE}\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "${cuda_MODULE}") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\${CUDA_MODULE}\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "${CUDA_MODULE}") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_cuda_CFLAGS=`$PKG_CONFIG --cflags "${cuda_MODULE}" 2>/dev/null`
+  pkg_cv_CUDA_CFLAGS=`$PKG_CONFIG --cflags "${CUDA_MODULE}" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -2953,16 +2953,16 @@ fi
  else
     pkg_failed=untried
 fi
-if test -n "$cuda_LIBS"; then
-    pkg_cv_cuda_LIBS="$cuda_LIBS"
+if test -n "$CUDA_LIBS"; then
+    pkg_cv_CUDA_LIBS="$CUDA_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\${cuda_MODULE}\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "${cuda_MODULE}") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\${CUDA_MODULE}\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "${CUDA_MODULE}") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_cuda_LIBS=`$PKG_CONFIG --libs "${cuda_MODULE}" 2>/dev/null`
+  pkg_cv_CUDA_LIBS=`$PKG_CONFIG --libs "${CUDA_MODULE}" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -2983,22 +2983,22 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        cuda_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "${cuda_MODULE}" 2>&1`
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "${CUDA_MODULE}" 2>&1`
         else
-	        cuda_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "${cuda_MODULE}" 2>&1`
+	        CUDA_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "${CUDA_MODULE}" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
-	echo "$cuda_PKG_ERRORS" >&5
+	echo "$CUDA_PKG_ERRORS" >&5
 
-	as_fn_error $? "Package requirements (${cuda_MODULE}) were not met:
+	as_fn_error $? "Package requirements (${CUDA_MODULE}) were not met:
 
-$cuda_PKG_ERRORS
+$CUDA_PKG_ERRORS
 
 Consider adjusting the PKG_CONFIG_PATH environment variable if you
 installed software in a non-standard prefix.
 
-Alternatively, you may set the environment variables cuda_CFLAGS
-and cuda_LIBS to avoid the need to call pkg-config.
+Alternatively, you may set the environment variables CUDA_CFLAGS
+and CUDA_LIBS to avoid the need to call pkg-config.
 See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
@@ -3009,30 +3009,30 @@ as_fn_error $? "The pkg-config script could not be found or is too old.  Make su
 is in your PATH or set the PKG_CONFIG environment variable to the full
 path to pkg-config.
 
-Alternatively, you may set the environment variables cuda_CFLAGS
-and cuda_LIBS to avoid the need to call pkg-config.
+Alternatively, you may set the environment variables CUDA_CFLAGS
+and CUDA_LIBS to avoid the need to call pkg-config.
 See the pkg-config man page for more details.
 
 To get pkg-config, see <http://pkg-config.freedesktop.org/>.
 See \`config.log' for more details" "$LINENO" 5; }
 else
-	cuda_CFLAGS=$pkg_cv_cuda_CFLAGS
-	cuda_LIBS=$pkg_cv_cuda_LIBS
+	CUDA_CFLAGS=$pkg_cv_CUDA_CFLAGS
+	CUDA_LIBS=$pkg_cv_CUDA_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
 fi
 
-if test -n "$cuda_ROOT"; then
-    pkg_cv_cuda_ROOT="$cuda_ROOT"
+if test -n "$CUDA_ROOT"; then
+    pkg_cv_CUDA_ROOT="$CUDA_ROOT"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\${cuda_MODULE}\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "${cuda_MODULE}") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\${CUDA_MODULE}\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "${CUDA_MODULE}") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_cuda_ROOT=`$PKG_CONFIG --variable="cudaroot" "${cuda_MODULE}" 2>/dev/null`
+  pkg_cv_CUDA_ROOT=`$PKG_CONFIG --variable="cudaroot" "${CUDA_MODULE}" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -3040,22 +3040,22 @@ fi
  else
     pkg_failed=untried
 fi
-cuda_ROOT=$pkg_cv_cuda_ROOT
+CUDA_ROOT=$pkg_cv_CUDA_ROOT
 
-if test "x$cuda_ROOT" = x""; then :
+if test "x$CUDA_ROOT" = x""; then :
 
 fi
 
-if test -n "$cuda_LIBDIR"; then
-    pkg_cv_cuda_LIBDIR="$cuda_LIBDIR"
+if test -n "$CUDA_LIBDIR"; then
+    pkg_cv_CUDA_LIBDIR="$CUDA_LIBDIR"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\${cuda_MODULE}\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "${cuda_MODULE}") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\${CUDA_MODULE}\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "${CUDA_MODULE}") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_cuda_LIBDIR=`$PKG_CONFIG --variable="libdir" "${cuda_MODULE}" 2>/dev/null`
+  pkg_cv_CUDA_LIBDIR=`$PKG_CONFIG --variable="libdir" "${CUDA_MODULE}" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -3063,21 +3063,21 @@ fi
  else
     pkg_failed=untried
 fi
-cuda_LIBDIR=$pkg_cv_cuda_LIBDIR
+CUDA_LIBDIR=$pkg_cv_CUDA_LIBDIR
 
-if test "x$cuda_LIBDIR" = x""; then :
+if test "x$CUDA_LIBDIR" = x""; then :
 
 fi
-cuda_RPATH="-Wl,-rpath,${cuda_LIBDIR}"
-cuda_NVCC=${cuda_ROOT}/bin/nvcc
-cuda_NVCCFLAGS=
-cuda_NVCCFLAGS+="-gencode=arch=compute_30,code=sm_30"
-cuda_NVCCFLAGS+=" -gencode=arch=compute_35,code=sm_35"
-cuda_NVCCFLAGS+=" -gencode=arch=compute_50,code=sm_50"
-cuda_NVCCFLAGS+=" -gencode=arch=compute_60,code=sm_60"
-cuda_NVCCFLAGS+=" -gencode=arch=compute_70,code=sm_70"
-cuda_NVCCFLAGS+=" -gencode=arch=compute_75,code=sm_75"
-cuda_NVCCFLAGS+=" -gencode=arch=compute_75,code=compute_75"
+CUDA_RPATH="-Wl,-rpath,${CUDA_LIBDIR}"
+NVCC=${CUDA_ROOT}/bin/nvcc
+NVCCFLAGS=
+NVCCFLAGS+="-gencode=arch=compute_30,code=sm_30"
+NVCCFLAGS+=" -gencode=arch=compute_35,code=sm_35"
+NVCCFLAGS+=" -gencode=arch=compute_50,code=sm_50"
+NVCCFLAGS+=" -gencode=arch=compute_60,code=sm_60"
+NVCCFLAGS+=" -gencode=arch=compute_70,code=sm_70"
+NVCCFLAGS+=" -gencode=arch=compute_75,code=sm_75"
+NVCCFLAGS+=" -gencode=arch=compute_75,code=compute_75"
 
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -3356,11 +3356,11 @@ done
 
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for r" >&5
-$as_echo_n "checking for r... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBR" >&5
+$as_echo_n "checking for LIBR... " >&6; }
 
-if test -n "$r_CFLAGS"; then
-    pkg_cv_r_CFLAGS="$r_CFLAGS"
+if test -n "$LIBR_CFLAGS"; then
+    pkg_cv_LIBR_CFLAGS="$LIBR_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libR\""; } >&5
@@ -3368,7 +3368,7 @@ if test -n "$r_CFLAGS"; then
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_r_CFLAGS=`$PKG_CONFIG --cflags "libR" 2>/dev/null`
+  pkg_cv_LIBR_CFLAGS=`$PKG_CONFIG --cflags "libR" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -3376,8 +3376,8 @@ fi
  else
     pkg_failed=untried
 fi
-if test -n "$r_LIBS"; then
-    pkg_cv_r_LIBS="$r_LIBS"
+if test -n "$LIBR_LIBS"; then
+    pkg_cv_LIBR_LIBS="$LIBR_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libR\""; } >&5
@@ -3385,7 +3385,7 @@ if test -n "$r_LIBS"; then
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_r_LIBS=`$PKG_CONFIG --libs "libR" 2>/dev/null`
+  pkg_cv_LIBR_LIBS=`$PKG_CONFIG --libs "libR" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -3406,22 +3406,22 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        r_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libR" 2>&1`
+	        LIBR_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libR" 2>&1`
         else
-	        r_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libR" 2>&1`
+	        LIBR_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libR" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
-	echo "$r_PKG_ERRORS" >&5
+	echo "$LIBR_PKG_ERRORS" >&5
 
 	as_fn_error $? "Package requirements (libR) were not met:
 
-$r_PKG_ERRORS
+$LIBR_PKG_ERRORS
 
 Consider adjusting the PKG_CONFIG_PATH environment variable if you
 installed software in a non-standard prefix.
 
-Alternatively, you may set the environment variables r_CFLAGS
-and r_LIBS to avoid the need to call pkg-config.
+Alternatively, you may set the environment variables LIBR_CFLAGS
+and LIBR_LIBS to avoid the need to call pkg-config.
 See the pkg-config man page for more details." "$LINENO" 5
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
@@ -3432,15 +3432,15 @@ as_fn_error $? "The pkg-config script could not be found or is too old.  Make su
 is in your PATH or set the PKG_CONFIG environment variable to the full
 path to pkg-config.
 
-Alternatively, you may set the environment variables r_CFLAGS
-and r_LIBS to avoid the need to call pkg-config.
+Alternatively, you may set the environment variables LIBR_CFLAGS
+and LIBR_LIBS to avoid the need to call pkg-config.
 See the pkg-config man page for more details.
 
 To get pkg-config, see <http://pkg-config.freedesktop.org/>.
 See \`config.log' for more details" "$LINENO" 5; }
 else
-	r_CFLAGS=$pkg_cv_r_CFLAGS
-	r_LIBS=$pkg_cv_r_LIBS
+	LIBR_CFLAGS=$pkg_cv_LIBR_CFLAGS
+	LIBR_LIBS=$pkg_cv_LIBR_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -3451,17 +3451,17 @@ echo "## -------------------- ##
 ## Rgtsvm configuration ##
 ## -------------------- ##"
 echo
-echo "CUDA_VERSION = ${cuda_VERSION}"
-echo "CUDA_ROOT    = ${cuda_ROOT}"
-echo "CUDA_CFLAGS  = ${cuda_CFLAGS}"
-echo "CUDA_LIBS    = ${cuda_LIBS}"
-echo "CUDA_RPATH   = ${cuda_RPATH}"
+echo "CUDA_VERSION = ${CUDA_VERSION}"
+echo "CUDA_ROOT    = ${CUDA_ROOT}"
+echo "CUDA_CFLAGS  = ${CUDA_CFLAGS}"
+echo "CUDA_LIBS    = ${CUDA_LIBS}"
+echo "CUDA_RPATH   = ${CUDA_RPATH}"
 echo "CXX          = ${CXX}"
 echo "CXXFLAGS     = ${CXXFLAGS}"
-echo "NVCC         = ${cuda_NVCC}"
-echo "NVCCFLAGS    = ${cuda_NVCCFLAGS}"
-echo "R_CFLAGS     = ${r_CFLAGS}"
-echo "R_LIBS       = ${r_LIBS}"
+echo "NVCC         = ${NVCC}"
+echo "NVCCFLAGS    = ${NVCCFLAGS}"
+echo "LIBR_CFLAGS  = ${LIBR_CFLAGS}"
+echo "LIBR_LIBS    = ${LIBR_LIBS}"
 echo
 
 
