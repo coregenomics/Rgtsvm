@@ -12,6 +12,7 @@ dnl - Print configuration summary.
 m4_define([pkgversion],
 	m4_esyscmd([sed -E -n 's/Version: (.+)/\1/p' DESCRIPTION | tr -d '\n']))
 AC_INIT([Rgtsvm], [pkgversion])
+m4_include([tools/pkg.m4])
 AC_CONFIG_FILES([src/Makefile])
 
 AC_LANG([C++])
