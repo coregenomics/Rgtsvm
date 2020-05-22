@@ -14,7 +14,7 @@ Packaged: 2018-02-09; Zhong Wang
 Authors@R: c(person("Zhong", "Wang", role = c("aut", "cre"),
                     email = "zw355@cornell.edu"),
              person("Pariksheet", "Nanda", role = "ctb",
-	            email = "pariksheet.nanda@uconn.edu"))
+                    email = "pariksheet.nanda@uconn.edu"))
 URL: https://github.com/Danko-Lab/Rgtsvm/
 BugReports: https://github.com/Danko-Lab/Rgtsvm/issues/
 NeedsCompilation: yes
